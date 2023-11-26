@@ -7,6 +7,7 @@ import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.MuseumStorage
 import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
 import com.jetbrains.kmpapp.screens.list.ListScreenModel
+import com.jetbrains.kmpapp.screens.components.QuestionScreenModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
@@ -39,6 +40,7 @@ val dataModule = module {
 val screenModelsModule = module {
     factoryOf(::ListScreenModel)
     factoryOf(::DetailScreenModel)
+    factoryOf(::QuestionScreenModel)
 }
 
 fun initKoin() {
