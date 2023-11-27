@@ -26,7 +26,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
         }
     }
 
@@ -40,6 +40,9 @@ kotlin {
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.ktor.client.okhttp)
+
+                // Adding sqldelight dependencies
+                implementation(libs.sqldelight.android.driver)
             }
 
             // Required for moko-resources to work
@@ -47,6 +50,9 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+
+            // Adding sqldelight dependencies
+            implementation(libs.sqldelight.native.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -62,6 +68,9 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.koin)
             implementation(libs.moko.resources.compose)
+
+            // Adding sqldelight dependencies
+            implementation(libs.sqldelight.coroutines.extensions)
         }
     }
 }
@@ -108,4 +117,12 @@ android {
 
 multiplatformResources {
     multiplatformResourcesPackage = "com.jetbrains.kmpapp"
+}
+
+sqldelight {
+    databases {
+        create("QuestionsDatabase"){
+            packageName.set("com.jetbrains.kmpapp.database")
+        }
+    }
 }
