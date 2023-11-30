@@ -5,6 +5,10 @@ import com.jetbrains.kmpapp.data.KtorMuseumApi
 import com.jetbrains.kmpapp.data.MuseumApi
 import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.MuseumStorage
+import com.jetbrains.kmpapp.data.QuestionDataSource
+import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
+import com.jetbrains.kmpapp.data.sqlDriverFactory
+import com.jetbrains.kmpapp.database.QuestionsDatabase
 import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
 import com.jetbrains.kmpapp.screens.list.ListScreenModel
 import com.jetbrains.kmpapp.screens.components.QuestionScreenModel
@@ -35,6 +39,13 @@ val dataModule = module {
             initialize()
         }
     }
+
+}
+
+val databaseModule = module {
+    factory{ sqlDriverFactory() }
+    single { QuestionsDatabase(driver = get()) }
+    single { SqlDelightQuestionDataSource(db = get()) }
 }
 
 val screenModelsModule = module {
@@ -48,6 +59,7 @@ fun initKoin() {
         modules(
             dataModule,
             screenModelsModule,
+            databaseModule  // Add the database module
         )
     }
 }

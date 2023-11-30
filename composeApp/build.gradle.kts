@@ -43,6 +43,9 @@ kotlin {
 
                 // Adding sqldelight dependencies
                 implementation(libs.sqldelight.android.driver)
+
+                // Adding koin dependencies for Android
+                implementation(libs.koin.android)
             }
 
             // Required for moko-resources to work

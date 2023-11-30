@@ -6,6 +6,7 @@ import com.jetbrains.kmpapp.data.MuseumObject
 import com.jetbrains.kmpapp.data.QuestionListEvent
 import com.jetbrains.kmpapp.data.QuestionListState
 import com.jetbrains.kmpapp.data.QuestionObject
+import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +14,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 
-class QuestionScreenModel(): ScreenModel {
+class QuestionScreenModel(
+    questionDataSource: SqlDelightQuestionDataSource
+): ScreenModel {
+
+    init {
+        questionDataSource.getQuestions()
+    }
 
     private val _state = MutableStateFlow(QuestionListState(
         questions = questions
