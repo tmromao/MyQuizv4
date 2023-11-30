@@ -19,6 +19,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -54,8 +55,9 @@ val screenModelsModule = module {
     factoryOf(::QuestionScreenModel)
 }
 
-fun initKoin() {
+fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) {
     startKoin {
+        appDeclaration()
         modules(
             dataModule,
             screenModelsModule,

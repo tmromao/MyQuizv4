@@ -18,9 +18,6 @@ class QuestionScreenModel(
     questionDataSource: SqlDelightQuestionDataSource
 ): ScreenModel {
 
-    init {
-        questionDataSource.getQuestions()
-    }
 
     private val _state = MutableStateFlow(QuestionListState(
         questions = questions

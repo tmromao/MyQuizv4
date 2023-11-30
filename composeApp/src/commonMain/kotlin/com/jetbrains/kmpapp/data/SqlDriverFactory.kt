@@ -8,7 +8,7 @@ expect fun Scope.sqlDriverFactory(): SqlDriver
 
 fun createDatabase(driver: SqlDriver) : QuestionsDatabase {
     val database = QuestionsDatabase(
-        driver = driver
+        driver = driver,
     )
     return database
 }
