@@ -13,6 +13,27 @@ class SqlDelightQuestionDataSource(
 ) : QuestionDataSource {
 
     private val questionQueries = db.questionsQueries
+
+    init {
+        questionQueries.transaction {
+            //questionQueries.deleteAll()
+            questionQueries.insertQuestionEntity(
+                id = 1,
+                question = "Qual a capital de Portugal?",
+                answer = "Lisboa"
+            )
+            questionQueries.insertQuestionEntity(
+                id = 2,
+                question = "Qual a capital da Espanha?",
+                answer = "Madrid"
+            )
+            questionQueries.insertQuestionEntity(
+                id = 3,
+                question = "Qual a capital da França?",
+                answer = "Paris"
+            )
+        }
+    }
     override fun getQuestions(): Flow<List<QuestionObject>> {
         return questionQueries
             .getQuestions()

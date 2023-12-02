@@ -1,5 +1,6 @@
 package com.jetbrains.kmpapp.screens.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -67,15 +68,15 @@ fun QuestionItem(
     questionObject: QuestionObject,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    Column(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.Start,
     ) {
-        Text("Question: ${questionObject.question}")
+        Text("Pergunta: ${questionObject.question}")
 
         Spacer(Modifier.width(16.dp))
 
-        Text("Answer: ${questionObject.answer}")
+        Text("Resposta: ${questionObject.answer}")
     }
 
 }
