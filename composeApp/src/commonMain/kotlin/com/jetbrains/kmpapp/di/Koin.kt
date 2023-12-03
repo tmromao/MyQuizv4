@@ -5,9 +5,7 @@ import com.jetbrains.kmpapp.data.KtorMuseumApi
 import com.jetbrains.kmpapp.data.MuseumApi
 import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.MuseumStorage
-import com.jetbrains.kmpapp.data.QuestionDataSource
 import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
-import com.jetbrains.kmpapp.data.sqlDriverFactory
 import com.jetbrains.kmpapp.database.QuestionsDatabase
 import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
 import com.jetbrains.kmpapp.screens.list.ListScreenModel
@@ -17,6 +15,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.KoinAppDeclaration
@@ -43,25 +42,36 @@ val dataModule = module {
 
 }
 
-val databaseModule = module {
-    factory{ sqlDriverFactory() }
-    single { QuestionsDatabase(driver = get()) }
-    single { SqlDelightQuestionDataSource(db = get()) }
-}
 
 val screenModelsModule = module {
-    factoryOf(::ListScreenModel)
+    factory { ListScreenModel(museumRepository = get()) }
+    factory { DetailScreenModel(museumRepository = get()) }
+    factory { QuestionScreenModel(questionDataSource = get()) }
+
+    /*factoryOf(::ListScreenModel)
     factoryOf(::DetailScreenModel)
-    factoryOf(::QuestionScreenModel)
+    factoryOf(::QuestionScreenModel)*/
 }
 
-fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) {
-    startKoin {
+fun initKoin(appDeclaration: KoinAppDeclaration = {}): Koin {
+    return startKoin {
         appDeclaration()
         modules(
             dataModule,
             screenModelsModule,
-            databaseModule  // Add the database module
+            databaseModule,  // Add the database module
+            sqlDelightQuestionsDataSourceModule,
+            platformModule()
         )
-    }
+    }.koin
 }
+
+val databaseModule = module {
+    single { QuestionsDatabase(driver = get()) }
+}
+
+val sqlDelightQuestionsDataSourceModule = module {
+    single { SqlDelightQuestionDataSource(db = get()) }
+}
+
+fun initKoin() = initKoin {}

@@ -15,7 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -25,12 +29,21 @@ import com.jetbrains.kmpapp.data.QuestionObject
 import org.koin.core.component.getScopeId
 
 
-data object QuestionScreen : Screen {
+const val KEY_QUESTION_SCREEN = "question"
+
+@OptIn(ExperimentalVoyagerApi::class)
+class QuestionScreen : Screen {
+
+    override val key : ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
+
+        val screenModel = getScreenModel<QuestionScreenModel>()
+
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel: QuestionScreenModel = getScreenModel()
+
+        //val screenModel = navigator.getNavigatorScreenModel<QuestionScreenModel>()
 
         //objects are a list of questions
         //val objects by screenModel.getObject().collectAsState()

@@ -2,16 +2,12 @@ package com.jetbrains.kmpapp.screens.components
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.jetbrains.kmpapp.data.MuseumObject
 import com.jetbrains.kmpapp.data.QuestionListEvent
 import com.jetbrains.kmpapp.data.QuestionListState
 import com.jetbrains.kmpapp.data.QuestionObject
 import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
