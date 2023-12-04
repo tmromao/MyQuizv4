@@ -9,20 +9,13 @@ import com.jetbrains.kmpapp.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.stopKoin
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setContent {
             App()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Closing Koin scope
-        stopKoin()
     }
 }
 

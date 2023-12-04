@@ -18,12 +18,5 @@ class MuseumApp : Application() {
     }
 }
 
-class AppActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            App()
-        }
-    }
-}
+
 

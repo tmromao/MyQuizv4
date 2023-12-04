@@ -9,10 +9,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SqlDelightQuestionDataSource(
-    db: QuestionsDatabase,
+    //db: QuestionsDatabase,
+    private val driverProvider : DatabaseDriverFactory,
 ) : QuestionDataSource {
 
-    private val questionQueries = db.questionsQueries
+    private var database:QuestionsDatabase? = null
+
+    private val questionQueries = database!!.questionsQueries
 
     init {
         questionQueries.transaction {
@@ -68,6 +71,18 @@ class SqlDelightQuestionDataSource(
 
     override suspend fun deleteQuestion(id: Long) {
         questionQueries.deleteQuestionEntity(id)
+    }
+
+    private suspend fun initDatabase(){
+        if(database == null) {
+            database = QuestionsDatabase.invoke(
+                driver = driverProvider.createDriver()
+            )
+        }
+    }
+    suspend operator fun <R> invoke(block: suspend (QuestionsDatabase) -> R): R {
+        initDatabase()
+        return block(database!!)
     }
 
 }
