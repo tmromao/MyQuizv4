@@ -5,7 +5,7 @@ import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import com.jetbrains.kmpapp.database.QuestionsDatabase
 
 actual class DatabaseDriverFactory {
-    actual suspend fun createDriver(): SqlDriver{
+    actual fun createDriver(): SqlDriver{
         return NativeSqliteDriver(QuestionsDatabase.Schema, "questions.db")
     }
 }

@@ -1,10 +1,12 @@
 package com.jetbrains.kmpapp.di
 
+import com.jetbrains.kmpapp.data.DatabaseDriverFactory
 import com.jetbrains.kmpapp.data.InMemoryMuseumStorage
 import com.jetbrains.kmpapp.data.KtorMuseumApi
 import com.jetbrains.kmpapp.data.MuseumApi
 import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.MuseumStorage
+import com.jetbrains.kmpapp.data.QuestionDataSource
 import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
 import com.jetbrains.kmpapp.database.QuestionsDatabase
 import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
@@ -46,7 +48,7 @@ val dataModule = module {
 val screenModelsModule = module {
     factory { ListScreenModel(museumRepository = get()) }
     factory { DetailScreenModel(museumRepository = get()) }
-    factory { QuestionScreenModel(questionDataSource = get()) }
+    //factory { QuestionScreenModel(questionDataSource = get()) }
 
     /*factoryOf(::ListScreenModel)
     factoryOf(::DetailScreenModel)
@@ -58,6 +60,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}): Koin {
         appDeclaration()
         modules(
             dataModule,
+            questionScreenModel,
             screenModelsModule,
             databaseModule,  // Add the database module
             sqlDelightQuestionsDataSourceModule,
@@ -66,12 +69,29 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}): Koin {
     }.koin
 }
 
+val questionScreenModel = module{
+    single<QuestionScreenModel> {
+        QuestionScreenModel(
+            questionDataSource = get()
+        )
+    }
+}
+
 val databaseModule = module {
-    single { QuestionsDatabase(driver = get()) }
+    single<QuestionsDatabase> {
+        QuestionsDatabase(
+            driver = get<DatabaseDriverFactory>().createDriver()
+        )
+    }
 }
 
 val sqlDelightQuestionsDataSourceModule = module {
-    single { SqlDelightQuestionDataSource(db = get()) }
+    single<QuestionDataSource> {
+        SqlDelightQuestionDataSource(
+            db = get()
+        )
+    }
 }
+
 
 fun initKoin() = initKoin {}
