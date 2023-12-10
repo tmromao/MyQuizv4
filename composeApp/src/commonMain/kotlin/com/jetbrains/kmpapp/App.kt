@@ -10,6 +10,6 @@ import com.jetbrains.kmpapp.screens.list.ListScreen
 fun App() {
     MaterialTheme {
         //Navigator(ListScreen)
-        Navigator(QuestionScreen())
+        Navigator(QuestionScreen)
     }
 }

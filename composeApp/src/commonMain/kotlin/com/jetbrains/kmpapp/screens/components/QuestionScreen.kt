@@ -26,30 +26,23 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.jetbrains.kmpapp.data.QuestionListEvent
 import com.jetbrains.kmpapp.data.QuestionListState
 import com.jetbrains.kmpapp.data.QuestionObject
+import com.jetbrains.kmpapp.screens.list.ListScreenModel
 import org.koin.core.component.getScopeId
 
 
 const val KEY_QUESTION_SCREEN = "question"
 
-@OptIn(ExperimentalVoyagerApi::class)
-class QuestionScreen : Screen {
+data object QuestionScreen : Screen {
 
-    override val key : ScreenKey = uniqueScreenKey
-
+    override val key: ScreenKey = uniqueScreenKey
     @Composable
     override fun Content() {
 
-        val screenModel = getScreenModel<QuestionScreenModel>()
-
         val navigator = LocalNavigator.currentOrThrow
+        val screenModel: QuestionScreenModel = getScreenModel()
 
-        //val screenModel = navigator.getNavigatorScreenModel<QuestionScreenModel>()
+        val state by screenModel.uiState.collectAsState()
 
-        //objects are a list of questions
-        //val objects by screenModel.getObject().collectAsState()
-
-        val state by screenModel.state.collectAsState()
-        //val object by screenModel.getObject().collectAsState()
         ObjectLazyColumn(
             objects = state.questions,
             onEvent = {}

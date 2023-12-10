@@ -1,43 +1,48 @@
 package com.jetbrains.kmpapp.screens.components
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.jetbrains.kmpapp.data.CacheDataImp
 import com.jetbrains.kmpapp.data.QuestionListEvent
 import com.jetbrains.kmpapp.data.QuestionListState
 import com.jetbrains.kmpapp.data.QuestionObject
-import com.jetbrains.kmpapp.data.SqlDelightQuestionDataSource
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
+
+import kotlinx.coroutines.launch
 
 class QuestionScreenModel(
-    private val questionDataSource: SqlDelightQuestionDataSource,
+    private val questionDataSource: CacheDataImp,
 ) : ScreenModel {
 
     //private val _state = MutableStateFlow(QuestionListState())
-    private val _state = MutableStateFlow(QuestionListState())
-    val state = combine(
-        _state,
-        questionDataSource.getQuestions(),
-    ) { state, questions ->
-        state.copy(
-            questions = questions
-        )
-    }.stateIn(
-        scope = screenModelScope,
-        started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = QuestionListState()
-    )
+    private val _state : MutableStateFlow<QuestionListState> = MutableStateFlow(QuestionListState())
+    val uiState = _state.asStateFlow()
 
     init {
+        screenModelScope.launch {
 
+            //TODO: this is not working
+            uiState.value.copy(
+                questions = questionDataSource.getQuestions().first()
+            )
+            /*state = combine(
+                _state,
+                questionDataSource.getQuestions(),
+            ) { state, questions ->
+                state.copy(
+                    questions = questions
+                )
+            }.stateIn(
+                scope = screenModelScope,
+                started = SharingStarted.WhileSubscribed(5000L),
+                initialValue = QuestionListState()
+            ) as MutableStateFlow<QuestionListState>*/
+        }
 
     }
 
-
     //fun getObject() : Flow<QuestionObject?> = _state.asStateFlow()
-
     fun getObject(): QuestionObject = QuestionObject(
         id = 1,
         question = "Question 1",

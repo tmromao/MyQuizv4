@@ -1,5 +1,7 @@
 package com.jetbrains.kmpapp.di
 
+import com.jetbrains.kmpapp.data.CacheDataImp
+import com.jetbrains.kmpapp.data.DatabaseDriverFactory
 import com.jetbrains.kmpapp.data.InMemoryMuseumStorage
 import com.jetbrains.kmpapp.data.KtorMuseumApi
 import com.jetbrains.kmpapp.data.MuseumApi
@@ -22,13 +24,13 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(
+
+            repositoryModule,
+            sqlDelightModule,
             screenModelsModule,
 
-            sqlDelightModule,
-            platformModule(),
-
             dataModule,
-
+            platformModule(),
             )
     }
 
@@ -38,8 +40,12 @@ val screenModelsModule = module {
     factory { QuestionScreenModel(questionDataSource = get()) }
 }
 
+val repositoryModule = module {
+    single { CacheDataImp (sharedDatabase = get()) }
+}
+
 val sqlDelightModule = module {
-    single { SqlDelightQuestionDataSource(get()) }
+    single { SqlDelightQuestionDataSource(driverProvider = get()) }
 }
 
 
