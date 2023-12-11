@@ -15,18 +15,19 @@ class QuestionScreenModel(
     private val questionDataSource: CacheDataImp,
 ) : ScreenModel {
 
-    //private val _state = MutableStateFlow(QuestionListState())
-    private val _state : MutableStateFlow<QuestionListState> = MutableStateFlow(QuestionListState())
+    private val _state = MutableStateFlow(QuestionListState(
+        questions = questions
+    ))
     val uiState = _state.asStateFlow()
 
-    init {
+   /* init {
         screenModelScope.launch {
 
             //TODO: this is not working
             uiState.value.copy(
                 questions = questionDataSource.getQuestions().first()
             )
-            /*state = combine(
+            *//*state = combine(
                 _state,
                 questionDataSource.getQuestions(),
             ) { state, questions ->
@@ -37,10 +38,10 @@ class QuestionScreenModel(
                 scope = screenModelScope,
                 started = SharingStarted.WhileSubscribed(5000L),
                 initialValue = QuestionListState()
-            ) as MutableStateFlow<QuestionListState>*/
+            ) as MutableStateFlow<QuestionListState>*//*
         }
 
-    }
+    }*/
 
     //fun getObject() : Flow<QuestionObject?> = _state.asStateFlow()
     fun getObject(): QuestionObject = QuestionObject(
