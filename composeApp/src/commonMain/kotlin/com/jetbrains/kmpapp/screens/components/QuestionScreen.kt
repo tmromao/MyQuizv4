@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,6 +43,15 @@ data object QuestionScreen : Screen {
         val screenModel: QuestionScreenModel = getScreenModel()
 
         val state by screenModel.uiState.collectAsState()
+
+        //TODO: This is not working - need to figure out why
+        /* aqui devia iniciar o load das questão inicial, id=1
+        LaunchedEffect(Unit) {
+            /* Esta linha nao sera necessaria */
+            screenModel.onEvent(QuestionListEvent.Load)
+            /* Aqui printa a lista de questões */
+            println(state.questions)
+        }*/
 
         ObjectLazyColumn(
             objects = state.questions,

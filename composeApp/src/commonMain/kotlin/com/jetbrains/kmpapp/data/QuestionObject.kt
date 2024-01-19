@@ -10,7 +10,7 @@ data class QuestionListState(
     val questions: List<QuestionObject> = emptyList(),
 )
 
-sealed interface QuestionListEvent{
+sealed interface QuestionListEvent {
     object Load : QuestionListEvent
 
     data class OnQuestionClick(val question: QuestionObject) : QuestionListEvent
