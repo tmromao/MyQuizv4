@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.mokoResources)
     alias(libs.plugins.sqldelight)
+
+    id("co.touchlab.skie") version "0.5.5"
 }
 
 kotlin {
