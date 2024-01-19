@@ -7,25 +7,26 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.mokoResources)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
 
     listOf(
-        iosX64(),
+        //iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            isStatic = false
         }
     }
 
@@ -39,6 +40,12 @@ kotlin {
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.ktor.client.okhttp)
+
+                // Adding sqldelight dependencies
+                implementation(libs.sqldelight.android.driver)
+
+                // Adding koin dependencies for Android
+                implementation(libs.koin.android)
             }
 
             // Required for moko-resources to work
@@ -46,6 +53,9 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+
+            // Adding sqldelight dependencies
+            implementation(libs.sqldelight.native.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -61,6 +71,9 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.koin)
             implementation(libs.moko.resources.compose)
+
+            // Adding sqldelight dependencies
+            implementation(libs.sqldelight.coroutines.extensions)
         }
     }
 }
@@ -97,8 +110,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlin {
+        jvmToolchain(17)
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
@@ -107,4 +123,12 @@ android {
 
 multiplatformResources {
     multiplatformResourcesPackage = "com.jetbrains.kmpapp"
+}
+
+sqldelight {
+    databases {
+        create("QuestionsDatabase"){
+            packageName.set("com.jetbrains.kmpapp.database")
+        }
+    }
 }
