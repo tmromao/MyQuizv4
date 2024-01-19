@@ -16,12 +16,25 @@ class QuestionScreenModel(
 
 
     private val _state = MutableStateFlow(QuestionListState(
-        questions = questions
+        /*questions = questions*/
     ))
     val uiState = _state.asStateFlow()
     init {
         screenModelScope.launch {
 
+            initializeQuestions()
+
+            questionDataSource.getQuestions().collect {
+                _state.value = _state.value.copy(
+                    questions = it
+                )
+            }
+        }
+
+    }
+
+    private suspend fun initializeQuestions() {
+        screenModelScope.launch {
             questionDataSource.insertQuestion(
                 QuestionObject(
                     id = 1,
@@ -29,8 +42,22 @@ class QuestionScreenModel(
                     answer = "Answer 1"
                 )
             )
-        }
+            questionDataSource.insertQuestion(
+                QuestionObject(
+                    id = 2,
+                    question = "Question 2",
+                    answer = "Answer 2"
+                )
+            )
+            questionDataSource.insertQuestion(
+                QuestionObject(
+                    id = 3  ,
+                    question = "Question 3",
+                    answer = "Answer 3"
+                )
+            )
 
+        }
     }
 
     //fun getObject() : Flow<QuestionObject?> = _state.asStateFlow()
