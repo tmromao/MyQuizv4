@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.mokoResources)
     alias(libs.plugins.sqldelight)
 
-    id("co.touchlab.skie") version "0.5.5"
+    //id("co.touchlab.skie") version "0.5.5"
 }
 
 kotlin {
@@ -53,10 +53,14 @@ kotlin {
             // Required for moko-resources to work
             dependsOn(commonMain.get())
         }
+
+
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
 
             // Adding sqldelight dependencies
+            implementation("co.touchlab:stately-common:2.0.6")
+
             implementation(libs.sqldelight.native.driver)
         }
         commonMain.dependencies {
